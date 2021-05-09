@@ -1,10 +1,6 @@
 import * as cypress from "cypress";
 
 export class SideBar {
-  visit() {
-    cy.visit("http://localhost:2369/ghost/#/site");
-    return this;
-  }
 
   checkIfComponentExists(): Cypress.Chainable<boolean> {
     return cy.get("#ember24").then((selectedElement) => {
