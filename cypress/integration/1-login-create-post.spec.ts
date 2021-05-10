@@ -1,10 +1,14 @@
 import { Login } from "../page-objects/login";
 import { SideBar } from "../page-objects/side-bar";
 import { PostPage } from "../page-objects/post-page";
-import faker from "faker";
+import * as faker from "faker";
+import { should } from "chai";
 const login = new Login();
 const sideBar = new SideBar();
 const postPage = new PostPage();
+
+const cookieSessionName =
+  Cypress.env("cookieSessionName") || "ghost-admin-api-session";  
 
 describe("Should login and create a post with title succesfully", () => {
   Cypress.on("uncaught:exception", (err, runnable) => {
@@ -12,8 +16,13 @@ describe("Should login and create a post with title succesfully", () => {
     // failing the test
     return false;
   });
-  Cypress.Cookies.debug(true);
-  
+
+  const postTitle = faker.lorem.words()
+
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce(cookieSessionName);
+  });
+
   it("should login the user", () => {
     login.visit();
     login.loginWithEnvUser();
@@ -29,7 +38,11 @@ describe("Should login and create a post with title succesfully", () => {
 
   it("should create a post with random title", () => {
     if (postPage.checkIfComponentExists()) {
-      postPage.clickNewPost().fillTitle("Daniel").clickBack();
+      postPage.clickNewPost().fillTitle(postTitle).clickBack()
     }
+  });
+
+  it("post with random title should be available on post list", () => {
+    cy.contains(postTitle).should("exist")
   });
 });

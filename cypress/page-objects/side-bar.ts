@@ -10,7 +10,7 @@ export class SideBar {
   }
 
   goToPosts() {
-    cy.get('a#ember28[href="#/posts/"]').click()
+    cy.get('a[href="#/posts/"]').first().click()
     return this;
   }
   goToPages() {
@@ -19,7 +19,7 @@ export class SideBar {
   }
 
   goToTags() {
-    cy.get('a[href=#/tags/]').click();
+    cy.get('a[href="#/tags/"]').click();
     return this;
   }
 
